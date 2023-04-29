@@ -51,6 +51,10 @@
 
 /* XXX this should go away, needed for 'struct winsys_handle' */
 #include "frontend/drm_driver.h"
+//#include "frontend/sw_winsys.h"
+//#include <stdbool.h>
+//#include <xf86drm.h>
+
 
 /* A private modifier for now, so we have a way to request tiled but not
  * compressed.  It would perhaps be good to get real modifiers for the
@@ -1382,6 +1386,20 @@ fd_resource_create_with_modifiers(struct pipe_screen *pscreen,
    struct fd_resource *rsc;
    struct pipe_resource *prsc;
    uint32_t size;
+
+
+/*
+   if (fd_screen(screen)->sw_winsys {
+           so->dt = fd_screen(screen)->sw_winsys->displaytarget_create(
+                    fd_screen(screen)->sw_winsys,
+                    so->base.bind,
+                    so->base.format,
+                    so->base.width0,
+                    so->base.height0,
+                    64,
+                    NULL,
+                    &so->dt_stride);
+   }*/
 
    /* when using kmsro, scanout buffers are allocated on the display device
     * create_with_modifiers() doesn't give us usage flags, so we have to

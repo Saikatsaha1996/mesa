@@ -61,7 +61,7 @@ enum fd_gmem_reason {
 
 struct fd_screen {
    struct pipe_screen base;
-
+//   struct sw_winsys *sw_winsys;
    struct list_head context_list;
 
    simple_mtx_t lock;

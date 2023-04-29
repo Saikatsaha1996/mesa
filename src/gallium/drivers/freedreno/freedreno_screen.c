@@ -45,6 +45,9 @@
 #include "drm-uapi/drm_fourcc.h"
 #include <sys/sysinfo.h>
 
+#include "frontend/sw_winsys.h"
+#include "freedreno_public.h"
+
 #include "freedreno_fence.h"
 #include "freedreno_perfetto.h"
 #include "freedreno_query.h"
@@ -1001,6 +1004,69 @@ fd_screen_get_fd(struct pipe_screen *pscreen)
    return fd_device_fd(screen->dev);
 }
 
+
+/*
+static void
+fd_flush_frontbuffer(struct pipe_screen *_screen,
+                           struct pipe_context *pctx,
+                           struct pipe_resource *prsrc,
+                           unsigned level, unsigned layer,
+                           void *context_private, struct pipe_box *box)
+{
+        struct fd_resource *rsrc = fd_resource(prsrc);
+        struct fd_screen *screen = fd_screen(pscreen);
+        struct sw_winsys *winsys = screen->sw_winsys;
+
+        assert(level == 0);
+
+        struct pipe_box my_box = {
+                .width = rsrc->base.width0,
+                .height = rsrc->base.height0,
+                .depth = 1,
+        };
+
+        assert(rsrc->dt);
+        uint8_t *map = winsys->displaytarget_map(winsys, rsrc->dt,
+                                                 PIPE_USAGE_DEFAULT);
+        assert(map);
+
+        struct pipe_transfer *trans = NULL;
+        uint8_t *tex_map = pctx->texture_map(pctx, prsrc, level,
+                                             PIPE_MAP_READ, &my_box, &trans);
+
+        for (unsigned row = 0; row < rsrc->base.height0; ++row)
+                memcpy(map + row * rsrc->dt_stride,
+                       tex_map + row * trans->stride,
+                       MIN2(rsrc->dt_stride, trans->stride));
+
+        pctx->texture_unmap(pctx, trans);
+
+        winsys->displaytarget_display(winsys, rsrc->dt, context_private, box);
+}
+
+
+
+
+
+
+struct pipe_screen *
+fd_screen_create_sw(struct sw_winsys *winsys)
+{
+        int fd = drmOpenWithType("freedreno", NULL, DRM_NODE_RENDER);
+        if (fd < 0)
+                fd = open("/dev/kgsl-3d0", O_RDWR | O_CLOEXEC | O_NONBLOCK);
+        if (fd < 0)
+                return NULL;
+
+        struct pipe_screen *scr = fd_screen_create(fd, NULL);
+
+        if (scr)
+                fd_screen(scr)->sw_winsys = winsys;
+        return scr;
+}*/
+
+
+
 struct pipe_screen *
 fd_screen_create(int fd,
                  const struct pipe_screen_config *config,
@@ -1202,6 +1268,7 @@ fd_screen_create(int fd,
    pscreen->get_compute_param = fd_get_compute_param;
    pscreen->get_compiler_options = fd_get_compiler_options;
    pscreen->get_disk_shader_cache = fd_get_disk_shader_cache;
+//   pscreen->flush_frontbuffer = fd_flush_frontbuffer;
 
    fd_resource_screen_init(pscreen);
    fd_query_screen_init(pscreen);

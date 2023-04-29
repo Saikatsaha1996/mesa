@@ -169,6 +169,8 @@ struct fd_resource {
    uint16_t lrz_height;
    uint16_t lrz_pitch;
    struct fd_bo *lrz;
+   struct sw_displaytarget *dt;
+   unsigned dt_stride;
 };
 
 struct fd_memory_object {

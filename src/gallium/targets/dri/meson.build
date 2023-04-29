@@ -121,22 +121,6 @@ foreach d : [[with_gallium_kmsro, [
   endif
 endforeach
 
-# This only works on Unix-like oses, which is probably fine for dri
-prog_ln = find_program('ln', required : false)
-if prog_ln.found()
-  devenv.set('LIBGL_DRIVERS_PATH', meson.current_build_dir())
-
-  foreach d : gallium_dri_drivers
-    custom_target(
-      'devenv_@0@'.format(d),
-      input : libgallium_dri,
-      output : d,
-      command : [prog_ln, '-f', '@INPUT@', '@OUTPUT@'],
-      build_by_default : true,
-    )
-  endforeach
-endif
-
 meson.add_install_script(
   install_megadrivers_py.full_path(),
   libgallium_dri.full_path(),
