@@ -118,6 +118,8 @@ fd_resource_tracking_reference(struct fd_resource_tracking **ptr,
  */
 struct fd_resource {
    struct threaded_resource b;
+//   struct sw_displaytarget *dt;
+//   unsigned dt_stride;
    struct fd_bo *bo; /* use fd_resource_set_bo() to write */
    enum pipe_format internal_format;
    uint32_t hash; /* _mesa_hash_pointer() on this resource's address. */
@@ -169,9 +171,17 @@ struct fd_resource {
    uint16_t lrz_height;
    uint16_t lrz_pitch;
    struct fd_bo *lrz;
-   struct sw_displaytarget *dt;
+   struct fd_resource_sw_displaytarget dt;
    unsigned dt_stride;
 };
+
+
+//struct sw_displaytarget {
+//    int sw_displaytarget dt;
+//    unsigned dt_stride;
+//};
+
+
 
 struct fd_memory_object {
    struct pipe_memory_object b;

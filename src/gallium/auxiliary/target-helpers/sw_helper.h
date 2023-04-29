@@ -12,11 +12,11 @@
  * llvmpipe, softpipe.
  */
 
-/*
+
 #ifdef GALLIUM_FREEDRENO
 #include "freedreno/freedreno_public.h"
 #endif
-*/
+
 
 #ifdef GALLIUM_ZINK
 #include "zink/zink_public.h"
@@ -48,12 +48,12 @@ sw_screen_create_named(struct sw_winsys *winsys, const struct pipe_screen_config
 {
    struct pipe_screen *screen = NULL;
 
-/*
+
 #if defined(GALLIUM_FREEDRENO)
    if (screen == NULL && strcmp(driver, "freedreno") == 0)
       screen = fd_screen_create_sw(winsys);
 #endif
-*/
+
 
 #if defined(GALLIUM_LLVMPIPE)
    if (screen == NULL && strcmp(driver, "llvmpipe") == 0)
@@ -101,11 +101,10 @@ sw_screen_create_vk(struct sw_winsys *winsys, const struct pipe_screen_config *c
       (sw_vk || only_sw) ? "" : "d3d12",
 #endif
 
-/*
+
 #if defined(GALLIUM_FREEDRENO)
       (sw_vk || only_sw) ? "" : "freedreno",
 #endif
-*/
 
 #if defined(GALLIUM_ASAHI) && __APPLE__
       (sw_vk || only_sw) ? "" : "asahi",

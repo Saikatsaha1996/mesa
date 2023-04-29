@@ -1,4 +1,4 @@
-/*
+//*
  * Copyright (C) 2012 Rob Clark <robclark@freedesktop.org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -51,7 +51,7 @@
 
 /* XXX this should go away, needed for 'struct winsys_handle' */
 #include "frontend/drm_driver.h"
-//#include "frontend/sw_winsys.h"
+#include "frontend/sw_winsys.h"
 //#include <stdbool.h>
 //#include <xf86drm.h>
 
@@ -1388,18 +1388,18 @@ fd_resource_create_with_modifiers(struct pipe_screen *pscreen,
    uint32_t size;
 
 
-/*
-   if (fd_screen(screen)->sw_winsys {
-           so->dt = fd_screen(screen)->sw_winsys->displaytarget_create(
-                    fd_screen(screen)->sw_winsys,
-                    so->base.bind,
-                    so->base.format,
-                    so->base.width0,
-                    so->base.height0,
+
+   if (fd_screen(pscreen)->sw_winsys) {
+           rsc->dt = fd_screen(pscreen)->sw_winsys->displaytarget_create(
+                    fd_screen(pscreen)->sw_winsys,
+                    prsc->bind,
+                    prsc->format,
+                    prsc->width0,
+                    prsc->height0,
                     64,
                     NULL,
-                    &so->dt_stride);
-   }*/
+                    &prsc->dt_stride);
+   }
 
    /* when using kmsro, scanout buffers are allocated on the display device
     * create_with_modifiers() doesn't give us usage flags, so we have to
